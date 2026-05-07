@@ -5,29 +5,26 @@ const pintaUsuario = document.querySelector ('#pintaUsuario')
 
 // FUNCIONES
 //para recibir los datos del usuario creamos la función de la llamada a la API desde el botón
-function llamarApi() {
-  return new Promise((resolve, reject) => {
-    let conexion = true
-    setTimeout(() => {
-    if (conexion) {
-      let alumno = {nombre: 'pepe', correo:'pepe@correo.es'}
-      resolve(alumno);
-    } else {
-      reject ('Error: conexion perdida, intenta mas tarde')
-    }
-    }, 2000);
-  });
-}
+async function llamarApi() {
+    let conexion = true;
+    
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
-btnMostrar.addEventListener('click', ()=>{
-llamarApi().then(resolve=>{
-// aqui muestra los datos usuario
-let mensaje = `El nombre del usuario es: ${resolve.nombre} y su correo: ${resolve.correo}`
-    pintaUsuario.textContent = mensaje
-    })
-          .catch(reject =>{
-    //aqui mostrar error al usuario
-    pintaUsuario.textContent = reject
-    })
+    if (conexion) {
+        let alumno = {nombre: 'Ainhoa', correo: 'ainhoa@correo.es'}
+        return alumno;
+    } else {
+        throw new Error('Conexión perdida, inténtalo algo mas tarde');
+    }
+}
+// Añadimos un async por que vamos a usar el await
+btnMostrar.addEventListener('click', async () => {
+    try {
+        let resolve = await llamarApi();
+        let mensaje = `El nombre del usuario es: ${resolve.nombre} y su correo: ${resolve.correo}`;
+        pintaUsuario.textContent = mensaje;
+    } catch (reject) {
+        pintaUsuario.textContent = reject;
+    }
 })
 
